@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Calculator.Infrastructure.Cache.CacheKeyGeneration;
-
 using Castle.DynamicProxy;
 
 namespace Calculator.Infrastructure.Cache
@@ -9,9 +7,9 @@ namespace Calculator.Infrastructure.Cache
     public class CacheInterceptor : IInterceptor
     {
         private readonly ICacheManager cacheManager;
-        private readonly ICacheKeyGeneratorStrategy cacheKeyGenerator;
+        private readonly ICacheKeyGenerator cacheKeyGenerator;
 
-        public CacheInterceptor(ICacheManager cacheManager, ICacheKeyGeneratorStrategy cacheKeyGenerator)
+        public CacheInterceptor(ICacheManager cacheManager, ICacheKeyGenerator cacheKeyGenerator)
         {
             if (cacheManager == null)
             {

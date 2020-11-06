@@ -1,4 +1,6 @@
-﻿using Castle.Facilities.Startable;
+﻿using Calculator.Infrastructure.Cache.CacheKeyGeneration;
+
+using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -17,13 +19,21 @@ namespace Calculator.Infrastructure.Cache
             void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
             {
                 container.Register(Component.For<ICacheProvider>().ImplementedBy<TCacheProvider>().LifestyleSingleton());
-                container.Register(Component.For<ICacheManager>().ImplementedBy<CacheManager>().LifestyleTransient());
+                container.Register(Component.For<ICacheManager>().ImplementedBy<CacheManager>().LifestyleSingleton());
                 container.Register(Component.For<CacheInterceptor>().LifestyleTransient());
-                container.AddFacility<StartableFacility>()
-                    .Register(Component.For<CacheManagerFacility>()
-                    .LifestyleTransient()
-                    .StartUsingMethod(nameof(CacheManagerFacility.Init))
-                    .StopUsingMethod(nameof(CacheManagerFacility.Stop)));
+                container.Register(Classes.FromAssemblyContaining<ICacheKeyGeneratorStrategy>()
+                    .BasedOn<ICacheKeyGeneratorStrategy>()
+                    .WithServiceAllInterfaces()
+                    .LifestyleTransient());
+                container.Register(Component.For<ICacheKeyGenerator>().ImplementedBy<CacheKeyGenerator>().LifestyleTransient());
+                container.AddFacility<StartableFacility>(f=>f.DeferredStart())
+                    .Register(Component
+                    .For<CacheManagerFacility>()
+                   // .DependsOn(Dependency.OnComponent<CacheManager,ICacheManager>())
+                    .LifestyleSingleton()
+                    .StartUsingMethod(f => f.Start)
+                    .StopUsingMethod(f=>f.Stop)
+                    .Start());
                 container.Kernel.ProxyFactory.AddInterceptorSelector(new CacheInterceptorSelector());
 
             }

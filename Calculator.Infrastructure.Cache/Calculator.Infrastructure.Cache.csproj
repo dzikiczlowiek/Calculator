@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Windsor" Version="5.0.1" />
+    <PackageReference Include="Ceras" Version="4.1.7" />
   </ItemGroup>
 
 </Project>

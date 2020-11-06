@@ -9,6 +9,7 @@ using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Calculator.ConsoleApp
@@ -43,49 +44,10 @@ namespace Calculator.ConsoleApp
             hostBuilder.ConfigureServices(
                 (hostContext, services) =>
                 {
-            });
+                    services.AddMemoryCache();
+                });
 
             return hostBuilder;
-        }
-    }
-
-    public class InputListener : IHostedService
-    {
-        private readonly ICalculate calculate;
-
-        public InputListener(ICalculate calculate)
-        {
-            this.calculate = calculate;
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            Task.Run(StartListen);
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        private void StartListen()
-        {
-            while (true)
-            {
-                var input = Console.ReadLine();
-                var result = calculate.Execute(new Operation()
-                {
-                    Operator = Operator.Add,
-                    Parameter1 = 100m,
-                    Parameter2 = 66m
-                });
-                Console.WriteLine(result);
-                if(string.Equals(input, "exit", StringComparison.OrdinalIgnoreCase))
-                {
-                    break;
-                }
-            }
         }
     }
 }

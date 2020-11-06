@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Calculator.Infrastructure.Cache
 {
@@ -9,23 +10,7 @@ namespace Calculator.Infrastructure.Cache
         CacheEntry Get(string key);
 
         void Set<T>(string key, T value, TimeSpan absoluteExpirationRelativeToNow);
-    }
 
-
-    public class CacheEntry<T>
-    {
-        public CacheEntry(T value)
-        {
-            Value = value;
-        }
-
-        public T Value { get; }
-    }
-
-    public class CacheEntry : CacheEntry<object>
-    {
-        public CacheEntry(object value) : base(value)
-        {
-        }
+        IReadOnlyCollection<string> ActiveKeys();
     }
 }

@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Calculator.Engine\Calculator.Engine.csproj" />
+    <ProjectReference Include="..\Calculator.Infrastructure.Cache.InMemory\Calculator.Infrastructure.Cache.InMemory.csproj" />
+    <ProjectReference Include="..\Calculator.Infrastructure.Cache\Calculator.Infrastructure.Cache.csproj" />
     <ProjectReference Include="..\Calculator.Infrastructure\Calculator.Infrastructure.csproj" />
     <ProjectReference Include="..\Calculator.Operations\Calculator.Operations.csproj" />
   </ItemGroup>

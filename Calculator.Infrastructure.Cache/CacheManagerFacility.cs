@@ -9,7 +9,7 @@ namespace Calculator.Infrastructure.Cache
 
         public CacheManagerFacility(ICacheManager cacheManager)
         {
-            if(Current !=null)
+            if (Current !=null)
             {
                 throw new InvalidOperationException($"Only one instance of '{nameof(cacheManager)}' allowed.");
             }
@@ -19,7 +19,7 @@ namespace Calculator.Infrastructure.Cache
 
         public static ICacheManager Current { get; private set; }
 
-        public void Init()
+        public void Start()
         {
             lock (SyncObject)
             {

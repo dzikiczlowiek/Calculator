@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 using Microsoft.Extensions.Caching.Memory;
@@ -14,6 +18,26 @@ namespace Calculator.Infrastructure.Cache.InMemory
         public InMemoryCache(IMemoryCache memoryCache)
         {
             this.memoryCache = memoryCache;
+        }
+
+        public IReadOnlyCollection<string> ActiveKeys()
+        {
+            var field = typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            var collection = field.GetValue(memoryCache) as ICollection;
+            var keys = new List<string>();
+            if (collection != null)
+            {
+                foreach(var item in collection)
+                {
+                    var methodInfo = item.GetType().GetProperty("Key");
+                    var key = methodInfo.GetValue(item);
+                    keys.Add(key.ToString());
+                }
+
+                return keys.OrderBy(x => x).ToList();
+            }
+
+            return new List<string>();
         }
 
         public CacheEntry<T> Get<T>(string key)
