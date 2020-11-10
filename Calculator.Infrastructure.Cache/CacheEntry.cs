@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Calculator.Infrastructure.Cache
+﻿namespace Calculator.Infrastructure.Cache
 {
     public class CacheEntry<T>
     {

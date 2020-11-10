@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Reflection;
+﻿using System.Linq;
 
 using Castle.Core;
-using Castle.DynamicProxy;
 using Castle.MicroKernel.Proxy;
 
 namespace Calculator.Infrastructure.Cache

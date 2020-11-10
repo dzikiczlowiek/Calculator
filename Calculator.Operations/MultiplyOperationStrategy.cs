@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Calculator.Engine;
 using Calculator.Infrastructure;
 

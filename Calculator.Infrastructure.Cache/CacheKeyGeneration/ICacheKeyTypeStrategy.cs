@@ -1,6 +1,4 @@
 ﻿using System;
-
-using Castle.DynamicProxy.Contributors;
 namespace Calculator.Infrastructure.Cache.CacheKeyGeneration
 {
     public interface ICacheKeyTypeStrategy

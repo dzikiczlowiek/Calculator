@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Calculator.Infrastructure;
 
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;

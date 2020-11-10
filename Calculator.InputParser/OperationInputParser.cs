@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 using Calculator.Infrastructure;
 
-namespace Calculator.ConsoleApp
+namespace Calculator.InputParser
 {
     public class OperationInputParser : IOperationParser
     {
