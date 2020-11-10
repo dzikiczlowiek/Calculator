@@ -36,7 +36,7 @@ namespace Calculator.Infrastructure.Cache.InMemory
 
                 return keys.OrderBy(x => x).ToList();
             }
-
+            
             return new List<string>();
         }
 
