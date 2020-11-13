@@ -1,3 +1,5 @@
+using Calculator.WebApi.Configuration;
+
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 
@@ -23,7 +25,9 @@ namespace Calculator.WebApi
                //})
                .ConfigureWebHostDefaults(webBuilder =>
                {
-                   webBuilder.UseStartup<Startup>();
+                   webBuilder
+                   .ConfigureAppConfiguration(AppConfiguration.Setup)
+                   .UseStartup<Startup>();
                });
     }
 }

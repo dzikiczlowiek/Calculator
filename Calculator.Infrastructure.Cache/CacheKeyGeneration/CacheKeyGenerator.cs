@@ -9,7 +9,7 @@ namespace Calculator.Infrastructure.Cache.CacheKeyGeneration
     public class CacheKeyGenerator : ICacheKeyGenerator
     {
         private readonly IEnumerable<ICacheKeyGeneratorStrategy> cacheKeyGeneratorStrategies;
-
+        
         public CacheKeyGenerator(IEnumerable<ICacheKeyGeneratorStrategy> cacheKeyGeneratorStrategies)
         {
             if (cacheKeyGeneratorStrategies == null)
@@ -22,10 +22,13 @@ namespace Calculator.Infrastructure.Cache.CacheKeyGeneration
 
         public string GenerateKey(IInvocation invocation)
         {
-            var strategy = cacheKeyGeneratorStrategies.SingleOrDefault(x => x.IsApplicable(invocation));
+            var strategy = cacheKeyGeneratorStrategies.SingleOrDefault(
+                x => 
+                !(x is HashedCacheKeyGeneratorStrategy)
+                && x.IsApplicable(invocation));
             if (strategy == null)
             {
-                throw new InvalidOperationException("Didnt found valid cache key generation strategy for given action.");
+                strategy = new HashedCacheKeyGeneratorStrategy();
             }
 
             return strategy.GenerateKey(invocation);

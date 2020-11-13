@@ -1,0 +1,16 @@
+{
+  "CacheRules": {
+    "DefaultCacheExpirationTimeInSeconds": "300",
+    "Rules": [
+      {
+        "Type": "Calculator.Infrastructure.ICalculate",
+        "Methods": [
+          {
+            "Name": "Calculate",
+            "ExpirationTimeInSeconds" :  "60"
+          }
+        ]
+      }
+    ]
+  }
+}

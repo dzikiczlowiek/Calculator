@@ -7,6 +7,6 @@ namespace Calculator.Infrastructure.Cache
     {
         bool Allow(ComponentModel componentModel);
 
-        bool CacheInvocation(IInvocation invocation);
+        CacheInvocationDetails CacheInvocation(IInvocation invocation);
     }
 }

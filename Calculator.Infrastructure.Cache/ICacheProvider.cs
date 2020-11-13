@@ -12,5 +12,7 @@ namespace Calculator.Infrastructure.Cache
         void Set<T>(string key, T value, TimeSpan absoluteExpirationRelativeToNow);
 
         IReadOnlyCollection<string> ActiveKeys();
+
+        void RemoveEntry(string key);
     }
 }

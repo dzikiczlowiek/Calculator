@@ -34,14 +34,15 @@ namespace Calculator.Infrastructure.Cache
             return cacheRules.Any(x => x.Allow(componentModel));
         }
 
-        public bool Intercept(IInvocation invocation)
+        public CacheInvocationDetails GetCacheDetails(IInvocation invocation)
         {
             if (cacheRules?.Any() != true)
             {
-                return false;
+                return CacheInvocationDetails.NotCacheable;
             }
 
-            return cacheRules.Any(x => x.CacheInvocation(invocation));
+            var details = cacheRules.Select(x=>x.CacheInvocation(invocation)).SingleOrDefault(x => x.IsCacheable)??CacheInvocationDetails.NotCacheable;
+            return details;
         }
     }
 }

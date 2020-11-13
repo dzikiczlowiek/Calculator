@@ -7,7 +7,7 @@ namespace Calculator.Infrastructure.Cache
     {
         bool AllowCacheInterceptorOnComponent(ComponentModel componentModel);
 
-        bool Intercept(IInvocation invocation);
+        CacheInvocationDetails GetCacheDetails(IInvocation invocation);
 
         ICacheProvider CacheProvider { get; }
     }

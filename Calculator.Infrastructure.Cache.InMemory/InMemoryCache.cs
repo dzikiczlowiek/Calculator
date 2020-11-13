@@ -20,6 +20,11 @@ namespace Calculator.Infrastructure.Cache.InMemory
             this.memoryCache = memoryCache;
         }
 
+        public void RemoveEntry(string key)
+        {
+            memoryCache.Remove(key);
+        }
+
         public IReadOnlyCollection<string> ActiveKeys()
         {
             var field = typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);

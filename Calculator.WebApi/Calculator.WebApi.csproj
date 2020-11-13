@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -12,13 +12,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="CacheRulesSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Configuration\cacheRulesSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Castle.Windsor" Version="5.0.1" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Calculator.Engine\Calculator.Engine.csproj" />
+    <ProjectReference Include="..\Calculator.Infrastructure.Cache.Extensions\Calculator.Infrastructure.Cache.Extensions.csproj" />
     <ProjectReference Include="..\Calculator.Infrastructure.Cache.InMemory\Calculator.Infrastructure.Cache.InMemory.csproj" />
     <ProjectReference Include="..\Calculator.Infrastructure.Cache\Calculator.Infrastructure.Cache.csproj" />
     <ProjectReference Include="..\Calculator.Infrastructure\Calculator.Infrastructure.csproj" />

@@ -27,7 +27,8 @@ namespace Calculator.Infrastructure.Cache
 
         public void Intercept(IInvocation invocation)
         {
-            if (!cacheManager.Intercept(invocation))
+            var cacheDetails = cacheManager.GetCacheDetails(invocation);
+            if (!cacheDetails.IsCacheable)
             {
                 invocation.Proceed();
                 return;
@@ -42,7 +43,7 @@ namespace Calculator.Infrastructure.Cache
             }
 
             invocation.Proceed();
-            cacheManager.CacheProvider.Set(key, invocation.ReturnValue, TimeSpan.FromMinutes(5));
+            cacheManager.CacheProvider.Set(key, invocation.ReturnValue, cacheDetails.ExpirationTime.Value);
         }
     }
 }

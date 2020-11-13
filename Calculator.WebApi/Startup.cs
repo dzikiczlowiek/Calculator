@@ -1,5 +1,6 @@
 using System.Reflection;
 
+using Calculator.Infrastructure.Cache.Extensions;
 using Calculator.WebApi.IoC;
 using Calculator.WebApi.SwaggerConfiguration;
 
@@ -27,6 +28,7 @@ namespace Calculator.WebApi
         {
             services.AddControllers();
             services.AddMemoryCache();
+            services.UseFileConfigureableCacheRulesSettings(Configuration);
             services.ConfigureSwagger(Assembly.GetExecutingAssembly());
         }
 

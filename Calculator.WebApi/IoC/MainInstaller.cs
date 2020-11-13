@@ -4,6 +4,7 @@ using System.Linq;
 using Calculator.Engine;
 using Calculator.Infrastructure;
 using Calculator.Infrastructure.Cache;
+using Calculator.Infrastructure.Cache.CacheKeyGeneration;
 using Calculator.Infrastructure.Cache.InMemory;
 using Calculator.InputParser;
 using Calculator.Operations;
@@ -30,14 +31,23 @@ namespace Calculator.WebApi.IoC
         {
             container.AddFacility<TypedFactoryFacility>();
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
-            container.Register(Component.For<ICacheRules>().ImplementedBy<CalculateCacheRules>().LifestyleTransient());
+            //container.Register(Component.For<ICacheRules>().ImplementedBy<CalculateCacheRules>().LifestyleTransient());
             container.Register(Component.For<IOperationParser>().ImplementedBy<OperationInputParser>().LifestyleTransient());
+            container.Register(Component.For<ICacheKeyTypeStrategy>().ImplementedBy<OperationCacheKeyGeneratorStrategy>().LifestyleTransient());
+
             container.Install(
                 EngineInstaller.Create,
                 OperationsInstaller.Create,
                 CacheInstaller.Create<InMemoryCache>());
         }
 
+        public sealed class OperationCacheKeyGeneratorStrategy : CacheTypeStrategy<Operation>
+        {
+            public override string GetKey(Operation instance)
+            {
+                return $"{instance.Parameter1} {instance.Operator} {instance.Parameter2}";
+            }
+        }
         public sealed class CalculateCacheRules : ICacheRules
         {
             private readonly Type[] services = new[] { typeof(ICalculate) };
@@ -47,9 +57,9 @@ namespace Calculator.WebApi.IoC
                 return result;
             }
 
-            public bool CacheInvocation(IInvocation invocation)
+            public CacheInvocationDetails CacheInvocation(IInvocation invocation)
             {
-                return true;
+                return CacheInvocationDetails.CacheFor(TimeSpan.FromMinutes(5));
             }
         }
     }
