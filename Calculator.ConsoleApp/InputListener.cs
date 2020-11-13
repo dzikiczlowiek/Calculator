@@ -76,9 +76,9 @@ namespace Calculator.ConsoleApp
             return result;
         }
 
-        public bool CacheInvocation(IInvocation invocation)
+        public CacheInvocationDetails CacheInvocation(IInvocation invocation)
         {
-           return true;
+           return CacheInvocationDetails.CacheFor(TimeSpan.FromMinutes(5));
         }
     }
 }
