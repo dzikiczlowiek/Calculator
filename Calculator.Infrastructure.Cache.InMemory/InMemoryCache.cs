@@ -12,6 +12,7 @@ namespace Calculator.Infrastructure.Cache.InMemory
 {
     public sealed class InMemoryCache : ICacheProvider
     {
+        private static readonly object _syncObject = new object();
         private static CancellationTokenSource _resetToken = new CancellationTokenSource();
         private readonly IMemoryCache memoryCache;
 
@@ -25,24 +26,35 @@ namespace Calculator.Infrastructure.Cache.InMemory
             memoryCache.Remove(key);
         }
 
-        public IReadOnlyCollection<string> ActiveKeys()
+        public IReadOnlyCollection<CacheEntryInfo> ActiveKeys()
         {
             var field = typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
             var collection = field.GetValue(memoryCache) as ICollection;
-            var keys = new List<string>();
+            var keys = new List<CacheEntryInfo>();
             if (collection != null)
             {
                 foreach(var item in collection)
                 {
-                    var methodInfo = item.GetType().GetProperty("Key");
-                    var key = methodInfo.GetValue(item);
-                    keys.Add(key.ToString());
+                    keys.Add(Build(item));
                 }
 
-                return keys.OrderBy(x => x).ToList();
+                return keys.OrderBy(x => x.Key).ToList();
             }
             
-            return new List<string>();
+            return new List<CacheEntryInfo>();
+
+            CacheEntryInfo Build(object cacheEntryInstanceKeyValuePair)
+            {
+                var entryGetter = cacheEntryInstanceKeyValuePair.GetType().GetProperty("Value");
+                var entry = entryGetter.GetValue(cacheEntryInstanceKeyValuePair) as ICacheEntry;
+                var cacheEntryInfo = new CacheEntryInfo();
+                cacheEntryInfo.Key = entry.Key.ToString();
+                cacheEntryInfo.AbsoluteExpiration = entry.AbsoluteExpiration;
+                cacheEntryInfo.AbsoluteExpirationRealtiveToNow = entry.AbsoluteExpirationRelativeToNow;
+                cacheEntryInfo.ValueType = entry.Value.GetType().FullName;
+                cacheEntryInfo.Value = entry.Value;
+                return cacheEntryInfo;
+            }
         }
 
         public CacheEntry<T> Get<T>(string key)
@@ -71,6 +83,20 @@ namespace Calculator.Infrastructure.Cache.InMemory
             memoryOptions.AbsoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;
             memoryOptions.AddExpirationToken(new CancellationChangeToken(_resetToken.Token));
             memoryCache.Set(key, value, memoryOptions);
+        }
+
+        public void ClearCache()
+        {
+            lock (_syncObject)
+            {
+                if(_resetToken?.IsCancellationRequested == false && _resetToken.Token.CanBeCanceled)
+                {
+                    _resetToken.Cancel();
+                    _resetToken.Dispose();
+                }
+
+                _resetToken = new CancellationTokenSource();
+            }
         }
     }
 }

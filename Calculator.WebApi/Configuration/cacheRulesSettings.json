@@ -7,7 +7,16 @@
         "Methods": [
           {
             "Name": "Execute",
-            "ExpirationTimeInSeconds" :  "60"
+            "ExpirationTimeInSeconds": "60"
+          }
+        ]
+      },
+      {
+        "Type": "Calculator.Engine.IDelayMachine",
+        "Methods": [
+          {
+            "Name": "DoSth",
+            "ExpirationTimeInSeconds": "260"
           }
         ]
       }

@@ -18,6 +18,7 @@ namespace Calculator.Engine
         void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(Component.For<ICalculate>().ImplementedBy<Calculator>().LifestyleTransient());
+            container.Register(Component.For<IDelayMachine>().ImplementedBy<DelayMachine>().LifestyleTransient());
             container.Register(Component.For<OperationHandlerFactorySelector>().LifestyleTransient());
             container.Register(Component.For<IOperationStrategyFactory>().AsFactory(x => x.SelectedWith<OperationHandlerFactorySelector>()).LifestyleTransient());
         }

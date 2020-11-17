@@ -35,7 +35,10 @@ namespace Calculator.Infrastructure.Cache.CacheKeyGeneration
                 var result = BitConverter.ToString(hashRaw)
                    .Replace("-", string.Empty)
                    .ToLower();
-                return result;
+
+                var target = invocation.TargetType.Name;
+                var method = invocation.MethodInvocationTarget.Name;
+                return $"{target}_{method}#{result}";
 
                 object MapEnumerable(object enumerable)
                 {
